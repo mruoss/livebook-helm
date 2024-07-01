@@ -1,0 +1,101 @@
+## @section Common parameters
+
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+
+## @section Livebook configuration parameters
+## ref: https://github.com/livebook-dev/livebook?tab=readme-ov-file#environment-variables
+
+## Authentication parameters
+##
+auth:
+  ## @param auth.livebookPassword Password used to access Livebook. Must be at least 12 characters.
+  ##
+  livebookPassword: ""
+
+  ## @param auth.existingSecret Optionally specify an existing secret holding the livebook password.
+  ## Example:
+  ## existingSecret:
+  ##   name: "auth-secret"
+  ##   keyMapping:
+  ##     livebookPassword: "my-livebook-password"
+  ##
+  existingSecret: {}
+
+## Clustering parameters
+##
+clustering:
+  ## @param clustering.livebookCookie [default: randomly set] Optionally define the cookie for running Livebook in a cluster.
+  ##
+  livebookCookie: ""
+
+  ## @param clustering.existingSecret Optionally specify an existing secret holding values for `livebookCookie`.
+  ## Example:
+  ## existingSecret:
+  ##   name: "clustering-secret"
+  ##   keyMapping:
+  ##     livebookCookie: "..."
+  ##
+  existingSecret: {}
+
+## Networking parameters
+##
+networking:
+  ## @param networking.livebookSecretKeyBase [default: randomly set] Optionally define the cookie for running Livebook in a cluster.
+  ##
+  livebookSecretKeyBase: ""
+
+  ## @param networking.existingSecret Optionally specify an existing secret holding values for `livebookSecretKeyBase`.
+  ## Example:
+  ## existingSecret:
+  ##   name: "networking-secret"
+  ##   keyMapping:
+  ##     livebookSecretKeyBase: "..."
+  ##
+  existingSecret: {}
+
+## S3 bucket authentication parameters
+##
+
+s3:
+  ## @param s3.livebookAwsCredentials [default: false] Whether or not to read the S3 credentials from environment variables. 
+  ## Set this to `true` if you set `awsSecretAccessKey` and 
+  ##
+  livebookAwsCredentials: false
+  
+  ## @param s3.awsAccessKeyId S3 Access Key ID
+  ##
+  awsAccessKeyId: ""
+  
+  ## @param s3.awsSecretAccessKey S3 Secret Access Key
+  ##
+  awsSecretAccessKey: ""
+
+  ## @param s3.existingSecret Optionally specify an existing secret holding values for `awsAccessKeyId` and `awsSecretAccessKey`.
+  ## Example:
+  ## existingSecret:
+  ##   name: "s3-secret"
+  ##   keyMapping:
+  ##     awsAccessKeyId: "..."
+  ##     awsSecretAccessKey: "..."
+  ##
+  existingSecret: {}

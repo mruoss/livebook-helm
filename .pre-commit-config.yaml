@@ -1,0 +1,10 @@
+repos:
+- repo: https://github.com/bitnami/readme-generator-for-helm
+  rev: "2.6.1"
+  hooks:
+    - id: helm-readme-generator
+      # in order to run helm-readme-generator only once
+      pass_filenames: false
+      always_run: true
+      # default args are [--readme=chart/README.md, --values=chart/values.yaml]
+      args: [--readme=./README.md, --values=./values.yaml]

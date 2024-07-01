@@ -1,0 +1,24 @@
+annotations:
+  category: DeveloperTools
+  licenses: Apache-2.0
+apiVersion: v2
+appVersion: 0.1.0
+description: A Helm Chart for deploying Livebook
+home: https://github.com/mruoss/livebook-helm
+icon: https://livebook.dev/_astro/logo.d45aaa96_Z5fOtv.svg
+keywords:
+  - Elixir
+  - notebooks
+maintainers:
+  - name: Michael Ruoss
+    url: https://github.com/mruoss
+name: livebook
+sources:
+  - https://livebook.dev/
+  - https://github.com/livebook-dev/livebook
+type: application
+version: 0.1.0
+dependencies:
+  - name: common
+    version: 2.x.x
+    repository: oci://registry-1.docker.io/bitnamicharts
