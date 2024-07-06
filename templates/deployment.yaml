@@ -80,7 +80,9 @@ spec:
           {{- if .Values.livebook.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.args "context" $) | nindent 12 }}
           {{- end }}
-          env:           
+          env:
+            - name: TMPDIR
+              value: /tmp
             - name: POD_IP
               valueFrom:
                 fieldRef:
@@ -175,6 +177,8 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.livebook.persistence.mountPath }}
+            - name: tmp
+              mountPath: /tmp
             {{- if .Values.livebook.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.livebook.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -189,6 +193,8 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        - name: tmp
+          emptyDir: {}
         {{- if .Values.livebook.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.livebook.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
