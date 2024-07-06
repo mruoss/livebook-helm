@@ -155,6 +155,10 @@ livebook:
     ##
     pullSecrets: []
 
+  ## @param livebook.replicaCount Number of livebook replicas to deploy
+  ##
+  replicaCount: 1
+
   ## @param livebook.extraEnvVars Extra environment variables to be set on Livebook container
   ## e.g:
   ## extraEnvVars:

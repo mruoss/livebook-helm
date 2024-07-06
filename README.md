@@ -46,6 +46,7 @@
 | `livebook.image.digest`                     | Livebook image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
 | `livebook.image.pullPolicy`                 | Image pull policy                                                                                        | `IfNotPresent`                  |
 | `livebook.image.pullSecrets`                | Specify docker-registry secret names as an array                                                         | `[]`                            |
+| `livebook.replicaCount`                     | Number of livebook replicas to deploy                                                                    | `1`                             |
 | `livebook.extraEnvVars`                     | Extra environment variables to be set on Livebook container                                              | `[]`                            |
 | `livebook.extraEnvVarsCM`                   | ConfigMap with extra environment variables                                                               | `""`                            |
 | `livebook.extraEnvVarsSecret`               | Secret with extra environment variables                                                                  | `""`                            |
