@@ -96,7 +96,7 @@ spec:
             - name: LIVEBOOK_DISTRIBUTION
               value: name
             - name: LIVEBOOK_NODE
-              value: livebook@$(A_POD_IP)
+              value: livebook@$(POD_IP)
             - name: LIVEBOOK_PORT
               value: {{ .Values.livebook.containerPorts.livebook | quote }}
             - name: LIVEBOOK_HOME
