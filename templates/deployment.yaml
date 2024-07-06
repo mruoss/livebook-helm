@@ -104,31 +104,31 @@ spec:
             - name: LIVEBOOK_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.auth.existingSecret "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.auth.existingSecret "key" "livebookPassword") }}
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.auth.existingSecret "defaultNameSuffix" "auth" "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.auth.existingSecret "defaultNameSuffix" "auth" "key" "livebookPassword") }}
             - name: LIVEBOOK_SECRET_KEY_BASE
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.networking.existingSecret "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.networking.existingSecret "key" "livebookSecretKeyBase") }}
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.networking.existingSecret "defaultNameSuffix" "networking" "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.networking.existingSecret "defaultNameSuffix" "networking" "key" "livebookSecretKeyBase") }}
             - name: LIVEBOOK_COOKIE
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.clustering.existingSecret "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.clustering.existingSecret "key" "livebookCookie") }}
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.clustering.existingSecret "defaultNameSuffix" "clustering" "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.clustering.existingSecret "defaultNameSuffix" "clustering" "key" "livebookCookie") }}
             - name: LIVEBOOK_AWS_CREDENTIALS
               value: {{ .Values.livebook.s3.livebookAwsCredentials | quote }}
             {{- if .Values.livebook.s3.livebookAwsCredentials }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.s3.existingSecret "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.s3.existingSecret "key" "awsAccessKeyId") }}
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.s3.existingSecret "defaultNameSuffix" "s3" "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.s3.existingSecret "defaultNameSuffix" "s3" "key" "awsAccessKeyId") }}
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.s3.existingSecret "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.s3.existingSecret "key" "awsSecretAccessKey") }}
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.s3.existingSecret "defaultNameSuffix" "s3" "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.s3.existingSecret "defaultNameSuffix" "s3" "key" "awsSecretAccessKey") }}
             {{- end }}
 
           ports:
