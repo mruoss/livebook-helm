@@ -1,10 +1,62 @@
-# Livebook Chart
+# Livebook Helm Chart
+
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/livebook)](https://artifacthub.io/packages/search?repo=livebook)
+
+Livebook is a web application for writing interactive and collaborative code
+notebooks in Elixir.
+
+[Livebook Website](https://livebook.dev/) - [Livebook Github
+Repository](https://github.com/livebook-dev/livebook)
+
+## TL;DR
+
+    helm install my-release oci://ghcr.io/mruoss/charts/livebook --set livebook.password password-used-to-login
 
 ## Introduction
 
+This chart deploys Livebook onto a [Kubernetes](https://kubernetes.io/) cluster
+using the [Helm](https://helm.sh/) package manager.
+
 ## Prerequisites
 
+- Kubernetes 1.23+
+- Helm 3.8.0+
+
+## Installing the Chart
+
 ## Parameters
+
+To install the chart with the release name `my-release`:
+
+    helm install my-release oci://ghcr.io/mruoss/charts/livebook --set livebook.password password-used-to-login
+
+## Configuration and installation details
+
+### Password Protection
+
+Livebook cannot be deployed without protection. This Helm chart therefore
+requires defining a password. The password can be given as a value to `helm
+install`. Alternatively, an existing secret can be deployed separately and
+referenced under `livebook.existingSecret`. The referenced secret must define a
+key `.data.livebookPassword` containing the password.
+
+### Persistence
+
+Setting `livebook.persistence.enabled` to `true` will mount a volume on the
+default path for locally stored livebooks. Note that using persistence on
+multilple replicas will lead to problems. See the next section for further
+information.
+
+### Multiple Replicas and Clustering
+
+Multiple replicas (`livebook.replicaCount > 0`) are joined to form an Erlang
+cluster by default. This means that all sessions are shared among all replicas
+of Livebook.
+
+Note that using persistence on multilple replicas should be
+avoided because each replica only has access to notebooks that were saved on
+that node. You can store livebooks on S3 (see `livebook.s3.*`values) in order to
+have access to all notebooks from all nodes.
 
 ### Global parameters
 
@@ -136,7 +188,7 @@
 | `livebook.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                |
 | `livebook.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                |
 | `livebook.ingress.hostname`                 | Default host for the ingress resource                                                                                            | `livebook.local`    |
-| `livebook.ingress.path`                     | The Path to Livebook. You may need to set this to '/*' in order to use this with ALB ingress controllers.                        | `/`                 |
+| `livebook.ingress.path`                     | The Path to Livebook. You may need to set this to '/\*' in order to use this with ALB ingress controllers.                       | `/`                 |
 | `livebook.ingress.pathType`                 | Ingress path type                                                                                                                | `Prefix`            |
 | `livebook.ingress.servicePort`              | Service port to be used                                                                                                          | `livebook-main`     |
 | `livebook.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                |
