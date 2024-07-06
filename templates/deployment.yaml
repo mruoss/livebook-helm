@@ -179,6 +179,8 @@ spec:
               mountPath: {{ .Values.livebook.persistence.mountPath }}
             - name: tmp
               mountPath: /tmp
+            - name: home
+              mountPath: /home/livebook
             {{- if .Values.livebook.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.livebook.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -194,6 +196,8 @@ spec:
           emptyDir: {}
           {{- end }}
         - name: tmp
+          emptyDir: {}
+        - name: home
           emptyDir: {}
         {{- if .Values.livebook.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.livebook.extraVolumes "context" $) | nindent 8 }}
