@@ -15,7 +15,7 @@ Return true if a clustering secret object should be created
 {{- if .Values.livebook.clustering.existingSecret -}}
 {{- else -}}
   {{- $existingSecret := (lookup "v1" "Secret" (include "common.names.namespace" .) (printf "%s-clustering" (include "common.names.fullname" .) | trunc 63)).data -}}
-  livebookCookie: {{ $existingSecret.livebookCookie | default (.Values.livebook.clustering.livebookCookie | default (randAlphaNum 20)) | b64enc}}
+  livebookCookie: {{ $existingSecret.livebookCookie | default (.Values.livebook.clustering.livebookCookie | default (randAlphaNum 20) | b64enc)}}
 {{- end -}}
 {{- end -}}
 
@@ -26,7 +26,7 @@ Return true if a networking secret object should be created
 {{- if .Values.livebook.networking.existingSecret -}}
 {{- else -}}
   {{- $existingSecret := (lookup "v1" "Secret" (include "common.names.namespace" .) (printf "%s-networking" (include "common.names.fullname" .) | trunc 63)).data -}}
-  livebookSecretKeyBase: {{ $existingSecret.livebookSecretKeyBase | default (.Values.livebook.networking.livebookSecretKeyBase | default (randAlphaNum 48 | b64enc)) | b64enc}}
+  livebookSecretKeyBase: {{ $existingSecret.livebookSecretKeyBase | default (.Values.livebook.networking.livebookSecretKeyBase | default (randAlphaNum 48 | b64enc) | b64enc)}}
 {{- end -}}
 {{- end -}}
 
