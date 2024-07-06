@@ -1,0 +1,193 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+  {{- if .Values.livebook.deployment.updateStrategy }}
+  strategy: {{- toYaml .Values.livebook.deployment.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+      {{- if (or .Values.livebook.podAnnotations (include "livebook.auth.createSecret" .) (include "livebook.clustering.createSecret" .) (include "livebook.networking.createSecret" .) (include "livebook.s3.createSecret" .)) }}
+      annotations:
+        {{- if (or (include "livebook.auth.createSecret" .) (include "livebook.clustering.createSecret" .) (include "livebook.networking.createSecret" .) (include "livebook.s3.createSecret" .)) }}
+        checksum/credentials-secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.livebook.podAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.livebook.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      {{- include "livebook.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "livebook.serviceAccountName" . }}
+      {{- if .Values.livebook.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.livebook.podAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.livebook.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.livebook.nodeAffinityPreset.type "key" .Values.livebook.nodeAffinityPreset.key "values" .Values.livebook.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.livebook.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.livebook.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.livebook.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.livebook.priorityClassName }}
+      priorityClassName: {{ .Values.livebook.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.livebook.runtimeClassName }}
+      runtimeClassName: {{ .Values.livebook.runtimeClassName | quote }}
+      {{- end}}
+      automountServiceAccountToken: {{ .Values.livebook.automountServiceAccountToken }}
+      {{- if .Values.livebook.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.livebook.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.livebook.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.livebook.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.livebook.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if or .Values.livebook.initContainers }}
+      initContainers:
+        {{- include "common.tplvalues.render" (dict "value" .Values.livebook.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: livebook
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.livebook.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.livebook.image.pullPolicy | quote }}
+          {{- if .Values.livebook.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.livebook.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livebook.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livebook.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:           
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: LIVEBOOK_DATA_PATH
+              value: {{ .Values.livebook.persistence.mountPath | required "Please define a data path in .Values.livebook.persistence.mountPath"}}
+            - name: LIVEBOOK_CLUSTER
+              value: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+            - name: LIVEBOOK_DISTRIBUTION
+              value: name
+            - name: LIVEBOOK_NODE
+              value: livebook@$(A_POD_IP)
+            - name: LIVEBOOK_PORT
+              value: {{ .Values.livebook.containerPorts.livebook }}
+            - name: LIVEBOOK_HOME
+              value: "$(LIVEBOOK_DATA_PATH)"
+            - name: LIVEBOOK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.auth.existingSecret "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.auth.existingSecret "key" "livebookPassword") }}
+            - name: LIVEBOOK_SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.networking.existingSecret "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.networking.existingSecret "key" "livebookSecretKeyBase") }}
+            - name: LIVEBOOK_COOKIE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.clustering.existingSecret "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.clustering.existingSecret "key" "livebookCookie") }}
+            - name: LIVEBOOK_AWS_CREDENTIALS
+              value: {{ .Values.livebook.s3.livebookAwsCredentials | quote }}
+            {{- if .Values.livebook.s3.livebookAwsCredentials }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.s3.existingSecret "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.s3.existingSecret "key" "awsAccessKeyId") }}
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.s3.existingSecret "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.s3.existingSecret "key" "awsSecretAccessKey") }}
+            {{- end }}
+
+          ports:
+            - name: livebook-main
+              containerPort: {{ .Values.livebook.containerPorts.livebook }}
+              protocol: TCP
+          {{- if .Values.livebook.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.livebook.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /public/health
+              port: livebook-main
+              scheme: "HTTP"
+            initialDelaySeconds: {{ .Values.livebook.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livebook.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livebook.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livebook.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livebook.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.livebook.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.livebook.readinessProbe.enabled }}
+          readinessProbe:
+            tcpSocket:
+              port: livebook-main
+            initialDelaySeconds: {{ .Values.livebook.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livebook.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livebook.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livebook.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livebook.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.livebook.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livebook.resources }}
+          resources: {{- toYaml .Values.livebook.resources | nindent 12 }}
+          {{- else if ne .Values.livebook.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.livebook.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livebook.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.livebook.persistence.mountPath }}
+            {{- if .Values.livebook.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.livebook.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.livebook.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.livebook.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: data
+          {{- if .Values.livebook.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "livebook.claimName" . }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- if .Values.livebook.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.livebook.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

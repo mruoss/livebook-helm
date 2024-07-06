@@ -1,0 +1,55 @@
+{{- if and .Values.livebook.ingress.enabled -}}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list (include "livebook.ingress.annotations" . | fromYaml) .Values.commonAnnotations ) "context" . ) }}
+  {{- if $annotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.livebook.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.livebook.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if (include "livebook.ingress.hostname" .) }}
+    - host: {{ include "livebook.ingress.hostname" . }}
+      http:
+        paths:
+          {{- if .Values.livebook.ingress.extraPaths }}
+          {{- toYaml .Values.livebook.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.livebook.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.livebook.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "livebook-main" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.livebook.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "livebook-main" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.livebook.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.livebook.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $annotationsMap := include "common.tplvalues.render" (dict "value" $annotations "context" $) | fromYaml }}
+  {{- if or (and .Values.livebook.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" $annotationsMap )) .Values.livebook.ingress.selfSigned)) .Values.livebook.ingress.extraTls }}
+  tls:
+    {{- if and .Values.livebook.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" $annotationsMap )) .Values.livebook.ingress.selfSigned) }}
+    - hosts:
+        - {{ include "livebook.ingress.hostname" . }}
+      secretName: {{ printf "%s-tls" (include "livebook.ingress.hostname" .) }}
+    {{- end }}
+    {{- if .Values.livebook.ingress.extraTls }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.livebook.ingress.extraTls "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}
