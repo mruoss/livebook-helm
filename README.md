@@ -1,6 +1,6 @@
 # Livebook Helm Chart
 
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/livebook)](https://artifacthub.io/packages/search?repo=livebook)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/livebook)](https://artifacthub.io/packages/helm/livebook/livebook)
 
 Livebook is a web application for writing interactive and collaborative code
 notebooks in Elixir.
