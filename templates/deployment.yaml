@@ -98,7 +98,7 @@ spec:
             - name: LIVEBOOK_NODE
               value: livebook@$(A_POD_IP)
             - name: LIVEBOOK_PORT
-              value: {{ .Values.livebook.containerPorts.livebook }}
+              value: {{ .Values.livebook.containerPorts.livebook | quote }}
             - name: LIVEBOOK_HOME
               value: "$(LIVEBOOK_DATA_PATH)"
             - name: LIVEBOOK_PASSWORD
