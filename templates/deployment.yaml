@@ -92,7 +92,7 @@ spec:
             - name: LIVEBOOK_DATA_PATH
               value: {{ .Values.livebook.persistence.mountPath | required "Please define a data path in .Values.livebook.persistence.mountPath"}}
             - name: LIVEBOOK_CLUSTER
-              value: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+              value: {{ printf "dns:%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
             - name: LIVEBOOK_DISTRIBUTION
               value: name
             - name: LIVEBOOK_NODE
