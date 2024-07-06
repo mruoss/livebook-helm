@@ -1,0 +1,28 @@
+{{- if and .Values.livebook.persistence.enabled (not .Values.livebook.persistence.existingClaim) -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: livebook
+  {{- if or .Values.livebook.persistence.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.livebook.persistence.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- range .Values.livebook.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.livebook.persistence.size | quote }}
+  {{- if .Values.livebook.persistence.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.persistence.selector "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.livebook.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.livebook.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+  {{- include "common.storage.class" (dict "persistence" .Values.livebook.persistence "global" .Values.global) | nindent 2 }}
+{{- end -}}
