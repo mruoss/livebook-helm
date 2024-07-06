@@ -606,10 +606,6 @@ livebook:
     existingClaim: ""
   ## @section Volume Permissions parameters
 
-  ## Init containers parameters:
-  ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
-  ##
-  volumePermissions:
     ## @param livebook.volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
     ##
     enabled: false
