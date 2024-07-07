@@ -32,7 +32,7 @@ To install the chart with the release name `my-release`:
 
 ## Configuration and installation details
 
-### Password Protection
+### Password Protection
 
 Livebook cannot be deployed without protection. This Helm chart therefore
 requires defining a password. The password can be given as a value to `helm
