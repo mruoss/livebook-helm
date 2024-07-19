@@ -37,7 +37,7 @@ To install the chart with the release name `my-release`:
 Livebook cannot be deployed without protection. This Helm chart therefore
 requires defining a password. The password can be given as a value to `helm
 install`. Alternatively, an existing secret can be deployed separately and
-referenced under `livebook.existingSecret`. The referenced secret must define a
+referenced under `livebook.auth.existingSecret`. The referenced secret must define a
 key `.data.livebookPassword` containing the password.
 
 ### Persistence
