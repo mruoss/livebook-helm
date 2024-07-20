@@ -10,7 +10,7 @@ Repository](https://github.com/livebook-dev/livebook)
 
 ## TL;DR
 
-    helm install my-release oci://ghcr.io/mruoss/charts/livebook --set livebook.password password-used-to-login
+    helm install my-release oci://ghcr.io/mruoss/charts/livebook --set livebook.auth.livebookPassword password-used-to-login
 
 ## Introduction
 
