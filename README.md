@@ -28,7 +28,7 @@ using the [Helm](https://helm.sh/) package manager.
 
 To install the chart with the release name `my-release`:
 
-    helm install my-release oci://ghcr.io/mruoss/charts/livebook --set livebook.password password-used-to-login
+    helm install my-release oci://ghcr.io/mruoss/charts/livebook --set livebook.auth.livebookPassword password-used-to-login
 
 ## Configuration and installation details
 
