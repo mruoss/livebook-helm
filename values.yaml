@@ -105,15 +105,15 @@ livebook:
   ##
 
   s3:
-    ## @param livebook.s3.livebookAwsCredentials [default: false] Whether or not to read the S3 credentials from environment variables. 
-    ## Set this to `true` if you set `awsSecretAccessKey` and 
+    ## @param livebook.s3.livebookAwsCredentials [default: false] Whether or not to read the S3 credentials from environment variables.
+    ## Set this to `true` if you set `awsSecretAccessKey` and `awsAccessKeyId`.
     ##
     livebookAwsCredentials: false
-    
+
     ## @param livebook.s3.awsAccessKeyId S3 Access Key ID
     ##
     awsAccessKeyId: ""
-    
+
     ## @param livebook.s3.awsSecretAccessKey S3 Secret Access Key
     ##
     awsSecretAccessKey: ""
@@ -130,8 +130,8 @@ livebook:
 
   ## Livebook image version
   ## @param livebook.image.registry [default: ghcr.io] Livebook image registry
-  ## @param livebook.image.repository [default: ghcr.io/livebook-dev/livebook] Livebook image repository
-  ## @skip livebook.image.tag Livebook image tag (immutable tags are recommended)
+  ## @param livebook.image.repository [default: livebook-dev/livebook] Livebook image repository
+  ## @param livebook.image.tag Livebook image tag (immutable tags are recommended)
   ## @param livebook.image.digest Livebook image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param livebook.image.pullPolicy Image pull policy
   ## @param livebook.image.pullSecrets Specify docker-registry secret names as an array
@@ -207,7 +207,7 @@ livebook:
 
   ## @param livebook.automountServiceAccountToken Mount Service Account token in pod
   ##
-  automountServiceAccountToken: false
+  automountServiceAccountToken: true
 
   ## @param livebook.hostAliases Livebook pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
@@ -602,14 +602,15 @@ livebook:
     ## @param livebook.persistence.existingClaim Name of an existing PVC to use (only in `standalone` mode)
     ##
     existingClaim: ""
-  ## @section Volume Permissions parameters
 
+  ## @section Volume Permissions parameters
+  volumePermissions:
     ## @param livebook.volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
     ##
     enabled: false
     ## @param livebook.volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
     ## @param livebook.volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
-    ## @skip livebook.volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+    ## @param livebook.volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
     ## @param livebook.volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param livebook.volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ## @param livebook.volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
