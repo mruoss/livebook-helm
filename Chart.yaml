@@ -14,7 +14,7 @@ sources:
   - https://livebook.dev/
   - https://github.com/livebook-dev/livebook
 type: application
-version: 0.1.3
+version: 0.1.2
 dependencies:
   - name: common
     version: 2.x.x
@@ -26,11 +26,11 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: changed
-      description: Set automountServiceAccountToken to `true` by default
+      description: Set automountServiceAccountToken to true by default
     - kind: fixed
-     description: Quote livebook password if given as value
+      description: Quote livebook password if given as value
     - kind: fixed
-     description: Expose documentation for image tag
+      description: Expose documentation for image tag
   artifacthub.io/license: Apache-2.0
   artifacthub.io/maintainers: |
     - name: Michael Ruoss
@@ -49,7 +49,7 @@ annotations:
     url: https://github.com/mruoss/livebook-helm/raw/main/pubkey.asc
   artifacthub.io/images: |
     - name: latest
-      image: ghcr.io/livebook-dev/livebook:latest
+      image: "ghcr.io/livebook-dev/livebook:latest"
       platforms:
         - linux/amd64
         - linux/arm/v7
