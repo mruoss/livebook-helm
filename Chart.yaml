@@ -2,7 +2,7 @@ annotations:
   category: DeveloperTools
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 0.1.1
+appVersion: 0.13.3
 description: A Helm Chart for deploying Livebook
 home: https://github.com/mruoss/livebook-helm
 icon: https://livebook.dev/_astro/logo.d45aaa96_Z5fOtv.svg
@@ -17,7 +17,7 @@ sources:
   - https://livebook.dev/
   - https://github.com/livebook-dev/livebook
 type: application
-version: 0.1.1
+version: 0.1.2
 dependencies:
   - name: common
     version: 2.x.x
