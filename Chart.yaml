@@ -1,6 +1,51 @@
 annotations:
   category: DeveloperTools
   licenses: Apache-2.0
+
+  # artifacthub.io/category: no clue, their selection doesn't contain a fitting category!
+  artifacthub.io/containsSecurityUpdates: "false"
+  artifacthub.io/changes: |
+    - kind: changed
+      description: Set automountServiceAccountToken to `true` by default
+    - kind: fixed
+     description: Quote livebook password if given as value
+    - kind: fixed
+     description: Expose documentation for image tag
+  artifacthub.io/license: Apache-2.0
+  artifacthub.io/maintainers: |
+    - name: Michael Ruoss
+      email: michael@michaelruoss.ch
+  artifacthub.io/operator: "false"
+  artifacthub.io/prerelease: "false"
+  artifacthub.io/links: |
+    - name: GitHub
+      url: https://github.com/mruoss/livebook-helm
+    - name: Livebook
+      url: https://livebook.dev
+    - name: GitHub Livebook
+      url: https://github.com/livebook-dev/livebook
+  artifacthub.io/signKey: |
+    fingerprint: AC09B2057820983A970E19ACFFEA48129B71F632
+    url: https://github.com/mruoss/livebook-helm/raw/main/pubkey.asc
+  artifacthub.io/images: |
+    - name: latest
+      image: ghcr.io/livebook-dev/livebook:latest
+      platforms:
+        - linux/amd64
+        - linux/arm/v7
+        - linux/arm64
+    - name: cuda12.1
+      image: ghcr.io/livebook-dev/livebook:latest-cuda12.1
+      platforms:
+        - linux/amd64
+        - linux/arm/v7
+        - linux/arm64
+    - name: cuda11.8
+      image: ghcr.io/livebook-dev/livebook:latest-cuda11.8
+      platforms:
+        - linux/amd64
+        - linux/arm/v7
+        - linux/arm64
 apiVersion: v2
 appVersion: 0.13.3
 description: A Helm Chart for deploying Livebook
