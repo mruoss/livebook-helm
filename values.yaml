@@ -131,7 +131,7 @@ livebook:
   ## Livebook image version
   ## @param livebook.image.registry [default: ghcr.io] Livebook image registry
   ## @param livebook.image.repository [default: livebook-dev/livebook] Livebook image repository
-  ## @param livebook.image.tag Livebook image tag (immutable tags are recommended)
+  ## @param livebook.image.tag Livebook image tag
   ## @param livebook.image.digest Livebook image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param livebook.image.pullPolicy Image pull policy
   ## @param livebook.image.pullSecrets Specify docker-registry secret names as an array
@@ -610,7 +610,7 @@ livebook:
     enabled: false
     ## @param livebook.volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
     ## @param livebook.volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
-    ## @param livebook.volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+    ## @param livebook.volumePermissions.image.tag Init container volume-permissions image tag
     ## @param livebook.volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param livebook.volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ## @param livebook.volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
