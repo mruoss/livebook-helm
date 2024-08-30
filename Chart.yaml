@@ -27,7 +27,7 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: changed
-      Set default Livebook version to 0.14.0
+      description: Set default Livebook version to 0.14.0
   artifacthub.io/license: Apache-2.0
   artifacthub.io/maintainers: |
     - name: Michael Ruoss
