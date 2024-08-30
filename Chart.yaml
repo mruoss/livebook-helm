@@ -1,4 +1,5 @@
 apiVersion: v2
+# renovate: datasource=github-releases depName=livebook-dev/livebook
 appVersion: 0.13.3
 description: A Helm Chart for deploying Livebook
 home: https://github.com/mruoss/livebook-helm
