@@ -1,6 +1,6 @@
 apiVersion: v2
-# renovate: datasource=github-releases depName=livebook-dev/livebook
-appVersion: 0.13.3
+# renovate: image=ghcr.io/livebook-dev/livebook
+appVersion: 0.14.0
 description: A Helm Chart for deploying Livebook
 home: https://github.com/mruoss/livebook-helm
 icon: https://github.com/livebook-dev/livebook/raw/main/static/favicon.svg
@@ -15,7 +15,7 @@ sources:
   - https://livebook.dev/
   - https://github.com/livebook-dev/livebook
 type: application
-version: 0.1.2
+version: 1.0.0
 dependencies:
   - name: common
     version: 2.x.x
@@ -27,11 +27,7 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: changed
-      description: Set automountServiceAccountToken to true by default
-    - kind: fixed
-      description: Quote livebook password if given as value
-    - kind: fixed
-      description: Expose documentation for image tag
+      Set default Livebook version to 0.14.0
   artifacthub.io/license: Apache-2.0
   artifacthub.io/maintainers: |
     - name: Michael Ruoss
