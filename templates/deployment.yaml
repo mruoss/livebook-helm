@@ -132,6 +132,18 @@ spec:
                   name: {{ include "common.secrets.name" (dict "existingSecret" .Values.livebook.s3.existingSecret "defaultNameSuffix" "s3" "context" $) }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.livebook.s3.existingSecret "defaultNameSuffix" "s3" "key" "awsSecretAccessKey") }}
             {{- end }}
+            {{- if .Values.livebook.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.livebook.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.livebook.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.livebook.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.livebook.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.livebook.extraEnvVarsSecret "context" $) }}
+            {{- end }}
 
           ports:
             - name: livebook-main

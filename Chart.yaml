@@ -15,7 +15,7 @@ sources:
   - https://livebook.dev/
   - https://github.com/livebook-dev/livebook
 type: application
-version: 1.0.1
+version: 1.0.2
 dependencies:
   - name: common
     version: 2.x.x
@@ -26,8 +26,8 @@ annotations:
   # artifacthub.io/category: no clue, their selection doesn't contain a fitting category!
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
-    - kind: changed
-      description: Set default Livebook version to 0.14.0
+    - kind: fixed
+      description: Support for extraEnvVars
   artifacthub.io/license: Apache-2.0
   artifacthub.io/maintainers: |
     - name: Michael Ruoss
