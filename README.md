@@ -193,12 +193,12 @@ using the [Helm](https://helm.sh/) package manager.
 
 ### RBAC parameters
 
-| Name                                                   | Description                                               | Value   |
-| ------------------------------------------------------ | --------------------------------------------------------- | ------- |
-| `livebook.serviceAccount.create`                       | Enable the creation of a ServiceAccount for Livebook pods | `true`  |
-| `livebook.serviceAccount.name`                         | Name of the created ServiceAccount                        | `""`    |
-| `livebook.serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token | `false` |
-| `livebook.serviceAccount.annotations`                  | Custom annotations for Livebook ServiceAccount            | `{}`    |
+| Name                                                   | Description                                               | Value  |
+| ------------------------------------------------------ | --------------------------------------------------------- | ------ |
+| `livebook.serviceAccount.create`                       | Enable the creation of a ServiceAccount for Livebook pods | `true` |
+| `livebook.serviceAccount.name`                         | Name of the created ServiceAccount                        | `""`   |
+| `livebook.serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token | `true` |
+| `livebook.serviceAccount.annotations`                  | Custom annotations for Livebook ServiceAccount            | `{}`   |
 
 ### Other parameters
 

@@ -673,7 +673,7 @@ livebook:
     name: ""
     ## @param livebook.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
     ##
-    automountServiceAccountToken: false
+    automountServiceAccountToken: true
     ## @param livebook.serviceAccount.annotations Custom annotations for Livebook ServiceAccount
     ##
     annotations: {}
