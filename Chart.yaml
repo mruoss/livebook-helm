@@ -1,6 +1,6 @@
 apiVersion: v2
 # renovate: image=ghcr.io/livebook-dev/livebook
-appVersion: 0.14.3
+appVersion: 0.14.4
 description: A Helm Chart for deploying Livebook
 home: https://github.com/mruoss/livebook-helm
 icon: https://github.com/livebook-dev/livebook/raw/main/static/favicon.svg
