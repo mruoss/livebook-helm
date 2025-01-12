@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+    tags: ["*"]
   pull_request:
 
 env:
@@ -31,17 +32,21 @@ jobs:
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io -u $ --password-stdin
       - name: helm package
-        if: ${{ github.event_name != 'push' }}
-        run: helm package .
-      - name: helm package
         if: ${{ github.event_name == 'push' }}
         run: |
           echo "${{ secrets.CHART_SIGN_PRIVATE_KEY }}" | gpg --dearmor --output keyring.gpg
           helm package --sign --key 'Michael Ruoss (Livebook Helm Package Signing)' --keyring keyring.gpg .
       - name: helm push
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
         run: |
-          helm push livebook-*.tgz oci://ghcr.io/${{ github.repository_owner }}/charts
+          git_tag = $(git describe --tags --abbrev=0)
+          chart_tag = $(yq '.version' Chart.yaml)
+          if [[ "$git_tag" == "v${chart_tag}" ]]; then
+            helm push livebook-*.tgz oci://ghcr.io/${{ github.repository_owner }}/charts
+          else
+            echo "Git Tag and Chart.yaml version mismatch!"
+            exit 1
+          fi
       - name: Upload artifacthub-repo.yml
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | oras login ghcr.io -u mruoss --password-stdin
