@@ -37,20 +37,39 @@ jobs:
           echo "${{ secrets.CHART_SIGN_PRIVATE_KEY }}" | gpg --dearmor --output keyring.gpg
           helm package --sign --key 'Michael Ruoss (Livebook Helm Package Signing)' --keyring keyring.gpg .
       - name: helm push
+        id: helm_push
         if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
         run: |
           git_tag=$(git describe --tags --abbrev=0)
           chart_tag=$(yq '.version' Chart.yaml)
           if [[ "$git_tag" == "v${chart_tag}" ]]; then
             helm push livebook-*.tgz oci://ghcr.io/${{ github.repository_owner }}/charts
+            echo "new_tag=$git_tag" >> "$GITHUB_OUTPUT"
           else
             echo "Error: Git Tag (${git_tag}) and Chart.yaml version (v${chart_tag}) mismatch!"
             exit 1
           fi
       - name: Upload artifacthub-repo.yml
+        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | oras login ghcr.io -u mruoss --password-stdin
           oras push \
             ghcr.io/${{ github.repository_owner }}/charts/livebook:artifacthub.io \
             --config /dev/null:application/vnd.cncf.artifacthub.config.v1+yaml \
             artifacthub-repo.yml:application/vnd.cncf.artifacthub.repository-metadata.layer.v1.yaml
+
+      - name: Create Release
+        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.helm_push.outputs.new_tag }}
+          release_name: Release ${{ steps.helm_push.outputs.new_tag }}
+          body: |
+            # ${{ steps.helm_push.outputs.new_tag }}
+
+            Changelog: https://artifacthub.io/packages/helm/livebook/livebook?modal=changelog
+          draft: false
+          prerelease: false
