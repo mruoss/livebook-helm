@@ -44,7 +44,7 @@ jobs:
           if [[ "$git_tag" == "v${chart_tag}" ]]; then
             helm push livebook-*.tgz oci://ghcr.io/${{ github.repository_owner }}/charts
           else
-            echo "Git Tag and Chart.yaml version mismatch!"
+            echo "Git Tag (${git_tag}) and Chart.yaml version (v${chart_tag}) mismatch!"
             exit 1
           fi
       - name: Upload artifacthub-repo.yml
