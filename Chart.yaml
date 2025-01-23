@@ -15,7 +15,7 @@ sources:
   - https://livebook.dev/
   - https://github.com/livebook-dev/livebook
 type: application
-version: 1.0.6
+version: 1.0.7
 dependencies:
   - name: common
     version: 2.x.x
