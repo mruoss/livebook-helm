@@ -139,7 +139,7 @@ livebook:
   image:
     registry: ghcr.io
     repository: livebook-dev/livebook
-    tag: 0.14.5
+    tag: 0.14.6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
