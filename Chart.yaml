@@ -28,7 +28,6 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Upgraded Livebook to version 0.14.6
-  https://github.com/mruoss/livebook-helm/pull/12
   artifacthub.io/license: Apache-2.0
   artifacthub.io/maintainers: |
     - name: Michael Ruoss
