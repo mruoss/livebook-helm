@@ -1,12 +1,12 @@
 {
   extends: [
-    "config:base",
-    "config:recommended",
-    ":automergeMinor",
-    ":automergePr",
-    ":label(renovate-update)",
-    ":rebaseStalePrs",
-    ":prConcurrentLimit10",
-    "customManagers:helmChartYamlAppVersions",
+    'config:recommended',
+    'config:recommended',
+    ':automergeMinor',
+    ':automergePr',
+    ':label(renovate-update)',
+    ':rebaseStalePrs',
+    ':prConcurrentLimit10',
+    'customManagers:helmChartYamlAppVersions',
   ],
 }
