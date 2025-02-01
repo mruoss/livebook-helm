@@ -11,7 +11,7 @@ env:
   KUBECONFIG: /home/runner/.kube/config
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
