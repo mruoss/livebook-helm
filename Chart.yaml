@@ -52,13 +52,7 @@ annotations:
         - linux/arm/v7
         - linux/arm64
     - name: cuda12.1
-      image: ghcr.io/livebook-dev/livebook:latest-cuda12.1
-      platforms:
-        - linux/amd64
-        - linux/arm/v7
-        - linux/arm64
-    - name: cuda11.8
-      image: ghcr.io/livebook-dev/livebook:latest-cuda11.8
+      image: ghcr.io/livebook-dev/livebook:latest-cuda12
       platforms:
         - linux/amd64
         - linux/arm/v7
