@@ -15,7 +15,7 @@ sources:
   - https://livebook.dev/
   - https://github.com/livebook-dev/livebook
 type: application
-version: 1.1.1
+version: 1.1.2
 dependencies:
   - name: common
     version: 2.x.x
@@ -27,7 +27,7 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: changed
-      description: Upgraded Livebook to version 0.15.1
+      description: Upgraded Livebook to version 0.15.2
   artifacthub.io/license: Apache-2.0
   artifacthub.io/maintainers: |
     - name: Michael Ruoss
