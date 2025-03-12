@@ -63,7 +63,7 @@ using the [Helm](https://helm.sh/) package manager.
 | `livebook.s3.existingSecret`                | Optionally specify an existing secret holding values for `awsAccessKeyId` and `awsSecretAccessKey`.      | `{}`                    |
 | `livebook.image.registry`                   | Livebook image registry                                                                                  | `ghcr.io`               |
 | `livebook.image.repository`                 | Livebook image repository                                                                                | `livebook-dev/livebook` |
-| `livebook.image.tag`                        | Livebook image tag                                                                                       | `0.15.3`                |
+| `livebook.image.tag`                        | Livebook image tag                                                                                       | `0.15.4`                |
 | `livebook.image.digest`                     | Livebook image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `livebook.image.pullPolicy`                 | Image pull policy                                                                                        | `IfNotPresent`          |
 | `livebook.image.pullSecrets`                | Specify docker-registry secret names as an array                                                         | `[]`                    |
