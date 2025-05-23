@@ -10,7 +10,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.livebook.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  {{- if .Values.livebook.ingress.ingressClassName }}
   ingressClassName: {{ .Values.livebook.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -22,9 +22,7 @@ spec:
           {{- toYaml .Values.livebook.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.livebook.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.livebook.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "livebook-main" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.livebook.ingress.extraHosts }}
@@ -32,9 +30,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "livebook-main" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.livebook.ingress.extraRules }}
