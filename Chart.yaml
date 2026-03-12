@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: 0.19.3
 description: A Helm Chart for deploying Livebook
 home: https://github.com/mruoss/livebook-helm
-icon: https://raw.githubusercontent.com/livebook-dev/livebook/main/static/favicons/favicon.svg
+icon: https://livebook.dev/favicon.svg
 keywords:
   - Elixir
   - notebooks
