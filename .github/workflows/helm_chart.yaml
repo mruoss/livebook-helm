@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - uses: oras-project/setup-oras@v1
+      - uses: oras-project/setup-oras@v2
         with:
           version: 1.0.0
       - name: helm dependency update
